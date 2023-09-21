@@ -24,9 +24,9 @@ def capture_and_save_frames(myCam, save_dir, num_frames, duration):
     settings.numFrames = num_frames
     settings.bufferIndex = 1
     myCam.colorLutSetControl(FLR_ENABLE_E.FLR_ENABLE)
-    myCam.colorLutSetId(FLR_COLORLUT_ID_E.FLR_COLORLUT_0)
+    myCam.colorLutSetId(FLR_COLORLUT_ID_E.FLR_COLORLUT_0) #Choose te greyscale setting known for preserving data the best
 
-    capture_15 = myCam.captureFrames(data=settings)
+    capture_15 = myCam.captureFrames(data=settings) #In our case we capture in 16bit, meaning we have two bytes of data for each pixel
 
     for k in range(2, num_frames + 1):
         all_pixels = []
@@ -34,7 +34,7 @@ def capture_and_save_frames(myCam, save_dir, num_frames, duration):
         rows, columns = myCam.memGetCaptureSizeSrc(src)[2], myCam.memGetCaptureSizeSrc(src)[3]
         resolution = rows * columns
 
-        for i in range(0, (resolution) * 2, 256):
+        for i in range(0, (resolution) * 2, 256): #We go up to 256 Bytes because this is the max we could go to
             chunk_size = min(256, ((resolution) * 2) - i)
             buffer_data = myCam.memReadCaptureSrc(src, k, i, chunk_size)[1]
             pixels = []
